@@ -1,12 +1,24 @@
 from app import app
 #render_template gives you access to Jinja2 template engine
-from flask import render_template,request,make_response
+from flask import render_template,request,make_response,flash
 from app.forms import LoginForm
 
 @app.route('/',methods=['GET','POST'])
 def index():
 	login = LoginForm()
-	return render_template('template_index.html',form=login)
+	#Check if get method
+	if request.method == 'GET':
+		return render_template('template_index.html',form=login)
+	else:
+		#check if form data is valid
+		if login.validate_on_submit():
+			print(login.email.data)
+			print(login.passw.data)
+			return render_template('template_user.html')
+		#form data was not valid
+		else:
+			flash('Give proper information to email and password fields!')
+			return render_template('template_index.html',form=login)
 
 @app.route('/user/<name>')
 def user(name):
