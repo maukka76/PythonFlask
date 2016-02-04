@@ -2,6 +2,7 @@ from flask import Blueprint,render_template,flash,request,redirect
 from app.forms import LoginForm,RegisterForm
 from app.db_models import Users,Friends
 from app import db
+from flask.ext.bcrypt import check_password_hash
 
 auth = Blueprint('auth',__name__,template_folder='templates')
 
