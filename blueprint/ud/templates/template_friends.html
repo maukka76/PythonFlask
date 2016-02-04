@@ -21,7 +21,7 @@
 {% block body %}
 	{{super()}}
 	<div class="my_container">
-		<form action="/friends" method="POST">
+		<form action="/app/friends" method="POST">
 			{{ form.csrf_token }}
 			{{ form.name.label }}
 			{{ form.name(class='form-control') }}
