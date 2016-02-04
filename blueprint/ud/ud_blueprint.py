@@ -2,6 +2,7 @@ from flask import Blueprint,session,redirect,request,render_template,url_for,fla
 from app.forms import FriendForm
 from app import db
 from app.db_models import Users,Friends
+from werkzeug import secure_filename
 #Create blueprint
 #First argument is the name of the blueprint folder
 #second is always __name__ attribute
@@ -24,8 +25,13 @@ def friends():
 		return render_template('template_friends.html',form=form,isLogged=True)
 	else:
 		if form.validate_on_submit():
-			print('friends form submit ok')
+		
 			temp = Friends(form.name.data,form.address.data,form.age.data,session['user_id'])
+			#Save the image if present
+			if form.upload_file.data:
+				filename = secure_filename(form.upload_file.data.filename)
+				form.upload_file.data.save('app/static/images/' + filename)
+				temp.filename = '/static/images/' + filename
 			db.session.add(temp)
 			db.session.commit()
 			#tapa 2

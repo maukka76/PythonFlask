@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,flash,request,redirect
+from flask import Blueprint,render_template,flash,request,redirect,session
 from app.forms import LoginForm,RegisterForm
 from app.db_models import Users,Friends
 from app import db
