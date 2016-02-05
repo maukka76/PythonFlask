@@ -6,9 +6,13 @@ from flask.ext.bcrypt import check_password_hash
 
 auth = Blueprint('auth',__name__,template_folder='templates')
 
+@auth.route('/index/<int:page>',methods=['GET','POST'])
 @auth.route('/',methods=['GET','POST'])
-def index():
+def index(page=1):
 	login = LoginForm()
+	if request.method == 'GET' and 'user_id' in session:
+		friends = Friends.query.filter_by(user_id=session['user_id']).paginate(page,10,False)
+		return render_template('template_user.html',isLogged=True,friends=friends)
 	#Check if get method
 	if request.method == 'GET':
 		return render_template('template_index.html',form=login,isLogged=False)
@@ -23,7 +27,7 @@ def index():
 				session['user_id'] = user[0].id
 				session['isLogged'] = True
 				#tapa 1
-				friends = Friends.query.filter_by(user_id=user[0].id)
+				friends = Friends.query.filter_by(user_id=user[0].id).paginate(page,10,False)
 				print(friends)
 				return render_template('template_user.html',isLogged=True,friends=friends)
 			else:

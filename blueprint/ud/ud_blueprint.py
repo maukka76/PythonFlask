@@ -12,9 +12,13 @@ ud = Blueprint('ud',__name__,template_folder='templates',url_prefix=('/app/'))
 #/app/delete
 @ud.route('delete/<int:id>')
 def delete(id):
-	return "Delete"
+	friend = Friends.query.get(id)
+	db.session.delete(friend)
+	db.session.commit()
+	user = Users.query.get(session['user_id'])
+	return render_template('template_user.html',isLogged=True,friends=user.friends)
 
-@ud.route('update')
+@ud.route('update/<int:id>')
 def update():
 	return "Update"
 
@@ -36,8 +40,8 @@ def friends():
 			db.session.commit()
 			#tapa 2
 			user = Users.query.get(session['user_id'])
-			
-			return render_template('template_user.html',isLogged=True,friends=user.friends)
+			friends = Friends.query.filter_by(user_id=user.id).paginate(1,10,False)
+			return render_template('template_user.html',isLogged=True,friends=friends)
 		else:
 			flash('Give proper values to all fields')
 			return redirect(url_for('ud.friends'))
