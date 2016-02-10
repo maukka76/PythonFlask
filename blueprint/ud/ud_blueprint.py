@@ -39,9 +39,10 @@ def friends():
 			db.session.add(temp)
 			db.session.commit()
 			#tapa 2
-			user = Users.query.get(session['user_id'])
-			friends = Friends.query.filter_by(user_id=user.id).paginate(1,10,False)
-			return render_template('template_user.html',isLogged=True,friends=friends)
+			#user = Users.query.get(session['user_id'])
+			#friends = Friends.query.filter_by(user_id=user.id).paginate(1,10,False)
+			#return render_template('template_user.html',isLogged=True,friends=friends)
+			return redirect('/')
 		else:
 			flash('Give proper values to all fields')
 			return redirect(url_for('ud.friends'))
